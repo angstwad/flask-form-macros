@@ -1,0 +1,229 @@
+{# 
+   
+   Copyright 2014, Paul Durivage <paul.durivage+git@gmail.com
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+  #}
+
+
+{% macro Field(label, type, classes=[], horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}</label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+            {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+            <input type="{{ type }}"
+                   id="{{ kwargs.get('id') or label|slugify }}"
+                   name="{{ kwargs.get('name') or label|slugify }}"
+                   class="{{ classes|join(' ') }}"
+                   {% for key, val in kwargs.items() %}
+                       {% if val is sameas True %}
+                           {{ key }}
+                       {% else %}
+                           {{ key }}="{{ val }}"
+                       {% endif %}
+                   {% endfor %}
+            >
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro TextField(label, classes=[], size=20, horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}: </label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+            {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+            <input type="text"
+                   id="{{ kwargs.get('id') or label|slugify }}"
+                   name="{{ kwargs.get('name') or label|slugify }}"
+                   class="{{ classes|join(' ') }}"
+                   size="{{ size }}"
+                   {% for key, val in kwargs.items() %}
+                       {% if val is sameas True %}
+                           {{ key }}
+                       {% else %}
+                           {{ key }}="{{ val }}"
+                       {% endif %}
+                   {% endfor %}
+            >
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro PasswordField(label, classes=[], size=20, horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}: </label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+        {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+        <input type="password"
+               id="{{ kwargs.get('id') or label|slugify }}"
+               name="{{ kwargs.get('name') or label|slugify }}"
+               class="{{ classes|join(' ') }}"
+               size="{{ size }}"
+               {% for key, val in kwargs.items() %}
+                   {% if val is sameas True %}
+                       {{ key }}
+                   {% else %}
+                       {{ key }}="{{ val }}"
+                   {% endif %}
+               {% endfor %}
+        >
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro TextAreaField(label, classes=[], horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}</label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+        {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+        <textarea id="{{ idval }}"
+                  name="{{ kwargs.get('name') or label|slugify }}"
+                  class="{{ classes|join(' ') }}"
+                  {% for key, val in kwargs.items() %}
+                      {% if val is sameas True %}
+                          {{ key }}
+                      {% else %}
+                          {{ key }}="{{ val }}"
+                      {% endif %}
+                  {% endfor %}
+        >{{ kwargs.get('value', '')|escape }}</textarea>
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro SelectField(label, classes=[], choices=[], value=None, horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}: </label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+        {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+        <select id="{{ kwargs.get('name') or kwargs.get('id') or label|slugify }}"
+                name="{{ kwargs.get('name') or label|slugify }}"
+                class="{{ classes|join(' ') }}"
+                {% for key, val in kwargs.items() %}
+                    {% if val is sameas True %}
+                        {{ key }}
+                    {% else %}
+                       {{ key }}="{{ val }}"
+                    {% endif %}
+                {% endfor %}
+        >
+            {% for data, displayname in choices %}
+                {% if value == data %}
+                    <option value="{{ data }}" selected>{{ displayname }}</option>
+                {% else %}
+                    <option value="{{ data }}">{{ displayname }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro SelectMultipleField(label, classes=[], choices=[], size=10, value=None, horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}: </label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+        {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+        <select id="{{ kwargs.get('id') or label|slugify }}"
+                name="{{ kwargs.get('name') or label|slugify }}"
+                class="{{ classes|join(' ') }}"
+                size="{{ size }}"
+                multiple
+                {% for key, val in kwargs.items() %}
+                    {% if val is sameas True %}
+                        {{ key }}
+                    {% else %}
+                       {{ key }}="{{ val }}"
+                    {% endif %}
+                {% endfor %}
+        >
+            {% for data, displayname in choices %}
+                {% if data in value %}
+                    <option value="{{ data }}" selected>{{ displayname }}</option>
+                {% else %}
+                    <option value="{{ data }}">{{ displayname }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro BooleanField(label, classes=[], horizontal=False)  -%}
+    {% if horizontal %}
+        <div class="control-group">
+        <label class="control-label">{{ label }}: </label>
+    {% endif %}
+
+    <div{% if horizontal %} class="controls"{% endif %}>
+            {% if not horizontal %}<label>{{ label }}: </label>{% endif %}
+            <input type="checkbox"
+                   id="{{ kwargs.get('id') or label|slugify }}"
+                   name="{{ kwargs.get('name') or label|slugify }}"
+                   class="{{ classes|join(' ') }}"
+                   {% for key, val in kwargs.items() %}
+                       {% if val is sameas True %}
+                           {{ key }}
+                       {% elif val in [False, None] %}
+                           {# Do nothing #}
+                       {% else %}
+                           {{ key }}="{{ val }}"
+                       {% endif %}
+                   {% endfor %}
+            >
+    </div>
+
+    {% if horizontal %}
+        </div>
+    {% endif %}
+{% endmacro %}
